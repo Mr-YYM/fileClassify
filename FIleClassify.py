@@ -25,11 +25,11 @@ def get_date_info(date_format):
     num = {}
     for each_file in os.listdir():
         if os.path.isfile(each_file) and each_file != os.path.basename(__file__):
-            m_time_array = time.localtime(os.stat(each_file).st_mtime)  # 修改时间
-            a_time_array = time.localtime(os.stat(each_file).st_atime)  # 访问时间
-            c_time_array = time.localtime(os.stat(each_file).st_ctime)  # 创建时间
-            time_array = min(m_time_array, a_time_array, c_time_array)
-            date[each_file] = time.strftime(date_format, time_array)
+            m_time = time.localtime(os.stat(each_file).st_mtime)  # 修改时间
+            a_time = time.localtime(os.stat(each_file).st_atime)  # 访问时间
+            c_time = time.localtime(os.stat(each_file).st_ctime)  # 创建时间
+            min_time = min(m_time, a_time, c_time)
+            date[each_file] = time.strftime(date_format, min_time)
 
     for item in sort_a_date_list(set(date.values()), date_format):  # 对日期进行排序并统计数量
         num[item] = list(date.values()).count(item)
