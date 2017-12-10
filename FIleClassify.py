@@ -87,10 +87,9 @@ def reverse_action():
 
 
 def main():
-    format = ["%Y", "%Y-%m", "%Y-%m-%d"]
     response = input("请选择一个进行操作：\n1、按日期将文件分类\n2、将程序目录的文件夹里所有文件取出\n")
     if response == '1':
-        do_classify(format)
+        do_classify()
     elif response == '2':
         start = time.time()
         reverse_action()
@@ -100,11 +99,12 @@ def main():
         print("等下再来")
 
 
-def do_classify(format):
+def do_classify():
     while 1:
         try:
+            format_list = ["%Y", "%Y-%m", "%Y-%m-%d"]
             response = input("请选择分类格式：\n1、按年\n2、按年-月\n3、按年-月-日\n")
-            date_format = format[int(response) - 1]
+            date_format = format_list[int(response) - 1]
             break
         except (IndexError, TypeError, ValueError):
             print("输入错误,请正确输入")
