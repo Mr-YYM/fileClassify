@@ -18,6 +18,7 @@
 import os
 import shutil
 import time
+import re
 
 
 def get_date_info(date_format):
@@ -65,25 +66,31 @@ def classify(date_format):
     old_date = ''
     dates, nums = get_date_info(date_format)
     for each_file in os.listdir():
-        if each_file == os.path.basename(__file__):  # 跳过程序本身
+        if each_file == os.path.basename(__file__) or os.path.isdir(each_file):  # 跳过程序本身与文件夹
             continue
-        elif os.path.isfile(each_file):
+        elif os.path.splitext(each_file)[1] != '.md':
             date = dates[each_file]
             if date not in os.listdir():  # 建立相关文件夹
                 os.mkdir(date)
             if old_date != date:
                 print("正在处理%s,文件总数：%d" % (date, nums[date]))
             old_date = date
-            shutil.move(each_file, os.path.join(date, each_file))  # 移动文件
+            try:
+                shutil.move(each_file, os.path.join(date, each_file))  # 移动文件
+            except:
+                continue
 
 
 def reverse_action():
     for each_dir in os.listdir():
-        if os.path.isdir(each_dir) and not each_dir == ".git":
+        if os.path.isdir(each_dir) and re.match('\.', each_dir) is None:
             print("正在处理文件夹%s，文件个数为%d" % (each_dir, len(os.listdir(each_dir))))
             for each_file in os.listdir(each_dir):
-                shutil.move(os.path.join(each_dir, each_file), each_file)
-            os.removedirs(each_dir)
+                try:
+                    shutil.move(os.path.join(each_dir, each_file), each_file)
+                    os.removedirs(each_dir)
+                except:
+                    continue
 
 
 def main():
