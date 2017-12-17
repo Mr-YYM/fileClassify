@@ -21,20 +21,20 @@ import time
 import re
 
 
-def get_date_info(date_format):
-    date = {}
-    num = {}
+def get_file_info(date_format):
+    date_info = {}
+    num_info = {}
     for each_file in os.listdir():
         if os.path.isfile(each_file) and each_file != os.path.basename(__file__):
             m_time = time.localtime(os.stat(each_file).st_mtime)  # 修改时间
             a_time = time.localtime(os.stat(each_file).st_atime)  # 访问时间
             c_time = time.localtime(os.stat(each_file).st_ctime)  # 创建时间
             min_time = min(m_time, a_time, c_time)
-            date[each_file] = time.strftime(date_format, min_time)
+            date_info[each_file] = time.strftime(date_format, min_time)
 
-    for item in sort_a_date_list(set(date.values()), date_format):  # 对日期进行排序并统计数量
-        num[item] = list(date.values()).count(item)
-    return date, num
+    for item in sort_a_date_list(set(date_info.values()), date_format):  # 对日期进行排序并统计数量
+        num_info[item] = list(date_info.values()).count(item)
+    return date_info, num_info
 
 
 def insert_sort(lists):
@@ -57,23 +57,23 @@ def sort_a_date_list(date_arr, date_format):
             for i in insert_sort(date_arr_in_int)]  # 将int日期格式化
 
 
-def show_num_info(num):
-    for k, v in num.items():
+def show_num_info(num_info):
+    for k, v in num_info.items():
         print("%s有%d个" % (k, v))
 
 
 def classify(date_format):
     old_date = ''
-    dates, nums = get_date_info(date_format)
+    date_info, num_info = get_file_info(date_format)
     for each_file in os.listdir():
         if each_file == os.path.basename(__file__) or os.path.isdir(each_file):  # 跳过程序本身与文件夹
             continue
         elif os.path.splitext(each_file)[1] != '.md':
-            date = dates[each_file]
+            date = date_info[each_file]
             if date not in os.listdir():  # 建立相关文件夹
                 os.mkdir(date)
             if old_date != date:
-                print("正在处理%s,文件总数：%d" % (date, nums[date]))
+                print("正在处理%s,文件总数：%d" % (date, num_info[date]))
             old_date = date
             try:
                 shutil.move(each_file, os.path.join(date, each_file))  # 移动文件
@@ -116,7 +116,7 @@ def do_classify():
         except (IndexError, TypeError, ValueError):
             print("输入错误,请正确输入")
             time.sleep(1)
-    date_info = get_date_info(date_format)[1]
+    date_info = get_file_info(date_format)[1]
     if len(date_info) == 0:
         print("没有可以处理的文件")
     else:
