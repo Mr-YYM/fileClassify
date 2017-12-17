@@ -65,6 +65,15 @@ def show_num_info(num_info):
 def classify(date_format):
     old_date = ''
     date_info, num_info = get_file_info(date_format)
+    a=1
+    # dates = date_info.values()
+    # for file, date in date_info.items():
+    #     if file == os.path.basename(__file__) or os.path.isdir(file):
+    #         continue
+    #     elif os.path.splitext(file)[1] != '.md':
+    #         if date not in os.listdir():
+    #             os.mkdir(date)
+    #         shutil.move(file, os.path.join(date, file))
     for each_file in os.listdir():
         if each_file == os.path.basename(__file__) or os.path.isdir(each_file):  # 跳过程序本身与文件夹
             continue
