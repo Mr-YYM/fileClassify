@@ -86,11 +86,11 @@ def reverse_action():
         if os.path.isdir(each_dir) and re.match('\.', each_dir) is None:
             print("正在处理文件夹%s，文件个数为%d" % (each_dir, len(os.listdir(each_dir))))
             for each_file in os.listdir(each_dir):
-                try:
-                    shutil.move(os.path.join(each_dir, each_file), each_file)
-                    os.removedirs(each_dir)
-                except:
-                    continue
+                shutil.move(os.path.join(each_dir, each_file), each_file)
+            try:
+                os.removedirs(each_dir)
+            except:
+                continue
 
 
 def main():
